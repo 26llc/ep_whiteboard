@@ -8,36 +8,20 @@ exports.eejsBlock_editbarMenuLeft = (hookName, context) => {
 };
 
 exports.clientVars = async (hookName, context) => {
-  const draw = {
-    host: 'draw.etherpad.org',
-    onByDefault: false,
-    icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
-    position: 'left',
-  };
-
-  try {
-    if (!settings.host) throw new Error('missing host setting');
-    draw.host = settings.host;
-  } catch (e) {
+  if (!settings.host) {
     console.warn(
         'ep_draw.host NOT SET in settings.json. This must be set to the host name (optionally ' +
         'followed by port and base path) to the WBO server. For example: ' +
         '"ep_draw" {"host": "etherpad.example.com:5001/wbo"}');
   }
-
-  try {
-    draw.onByDefault = !!settings.onByDefault;
-  } catch (err) { /* ignored */ }
-
-  try {
-    if (settings.icon) draw.icon = settings.icon;
-  } catch (err) { /* ignored */ }
-
-  try {
-    if (settings.position) draw.position = settings.position;
-  } catch (err) { /* ignored */ }
-
-  return {ep_whiteboard: draw};
+  return {
+    ep_whiteboard: Object.assign({
+      host: 'draw.etherpad.org',
+      onByDefault: false,
+      icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
+      position: 'left',
+    }, settings),
+  };
 };
 
 exports.loadSettings = async (hookName, {settings: {ep_draw: pluginSettings = {}}}) => {
