@@ -89,7 +89,7 @@ const toggledraw = () => {
 
 exports.postAceInit = (hookName, {clientVars}) => {
   if (!clientVars) clientVars = window.clientVars; // For compatibility with Etherpad < v1.8.15.
-  settings = clientVars.ep_draw;
+  settings = clientVars.ep_whiteboard;
   padId = clientVars.padId;
   if (settings) {
     if (settings.onByDefault) {

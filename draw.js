@@ -37,5 +37,5 @@ exports.clientVars = async (hookName, context) => {
     draw.position = settings.ep_draw.position || 'left';
   } catch (err) { /* ignored */ }
 
-  return {ep_draw: draw};
+  return {ep_whiteboard: draw};
 };
