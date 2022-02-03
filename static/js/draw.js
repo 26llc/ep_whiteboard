@@ -12,10 +12,23 @@ const enabledraw = () => {
   const drawHost = settings.host;
 
   if ($('#draw').length === 0) { // If it's not available already then draw it
+    const url = `//${drawHost}/boards/${padId}?authorName=${authorName}&authorColor=${authorColor}`;
     $('#editorcontainer').append(
-        `<div id=draw><iframe id="drawEmbed" src="//${drawHost}/boards/${padId}?authorName=` +
-        `${authorName}&authorColor=${authorColor}" width="100%" height="100%" ` +
-        'style="border:none" frameborder="0" scrolling="no"></iframe></div>');
+        $('<div>')
+            .attr('id', 'draw')
+            .append(
+                $('<iframe>')
+                    .attr({
+                      id: 'drawEmbed',
+                      src: url,
+                      width: '100%',
+                      height: '100%',
+                      frameborder: '0',
+                      scrolling: 'no',
+                    })
+                    .css({
+                      border: 'none',
+                    })));
   }
   enabled = true;
   showdraw();
