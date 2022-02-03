@@ -89,36 +89,28 @@ const toggledraw = () => {
 
 exports.postAceInit = (hookName, {clientVars}) => {
   if (!clientVars) clientVars = window.clientVars; // For compatibility with Etherpad < v1.8.15.
-  settings = clientVars.ep_whiteboard;
+  settings = Object.assign({
+    host: 'draw.etherpad.org',
+    onByDefault: false,
+    icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
+    position: 'left',
+  }, clientVars.ep_whiteboard || {});
   padId = clientVars.padId;
-  if (settings) {
-    if (settings.onByDefault) {
-      enabledraw();
-      showdraw();
-    } else {
-      $('#draw').hide();
-      enabled = false;
-      // we don't draw it by default
-    }
-
-    $('.toggle_draw').click(() => {
-      toggledraw();
+  if (settings.onByDefault) {
+    enabledraw();
+    showdraw();
+  } else {
+    $('#draw').hide();
+    enabled = false;
+    // we don't draw it by default
+  }
+  $('.toggle_draw').click(() => { toggledraw(); });
+  if (settings.icon) {
+    $('.draw_icon').css('background-image', `url(${settings.icon})`);
+    $('.draw_icon').css({
+      height: '16px',
+      width: '16px',
     });
   }
-
-  try {
-    if (settings.icon) {
-      $('.draw_icon').css('background-image', `url(${settings.icon})`);
-      $('.draw_icon').css({
-        height: '16px',
-        width: '16px',
-      });
-    }
-  } catch (err) { /* ignored */ }
-
-  try {
-    if (settings.position === 'right') {
-      $('.draw').parent().prependTo('.menu_right');
-    }
-  } catch (err) { /* ignored */ }
+  if (settings.position === 'right') $('.draw').parent().prependTo('.menu_right');
 };
