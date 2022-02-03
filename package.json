@@ -22,5 +22,8 @@
   "dist": {
     "shasum": "927231aee0f19afa7a80fbfff8348401f15b0595"
   },
-  "_from": "ep_draw"
+  "_from": "ep_draw",
+  "peerDependencies": {
+    "ep_etherpad-lite": ">=1.8.7"
+  }
 }
