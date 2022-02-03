@@ -95,11 +95,9 @@ exports.postAceInit = (hookName, {clientVars}) => {
   settings = clientVars.ep_draw;
   padId = clientVars.padId;
   if (settings) {
-    if (settings.onByDefault) { // Setup testing else poop out
-      if (settings.onByDefault === 'true') {
-        enabledraw();
-        showdraw();
-      }
+    if (settings.onByDefault) {
+      enabledraw();
+      showdraw();
     } else {
       $('#draw').hide();
       enabled = false;
@@ -122,10 +120,8 @@ exports.postAceInit = (hookName, {clientVars}) => {
   } catch (err) { /* ignored */ }
 
   try {
-    if (settings.position) {
-      if (settings.position === 'right') {
-        $('.draw').parent().prependTo('.menu_right');
-      }
+    if (settings.position === 'right') {
+      $('.draw').parent().prependTo('.menu_right');
     }
   } catch (err) { /* ignored */ }
 };
