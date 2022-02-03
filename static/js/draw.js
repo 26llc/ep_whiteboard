@@ -7,12 +7,9 @@ let fullscreen = false;
 let visible = false;
 
 const enabledraw = () => {
-  const authorName = 'Testing';
-  const authorColor = $('#myswatch').css('background-color');
   const drawHost = settings.host;
 
   if ($('#draw').length === 0) { // If it's not available already then draw it
-    const url = `//${drawHost}/boards/${padId}?authorName=${authorName}&authorColor=${authorColor}`;
     $('#editorcontainer').append(
         $('<div>')
             .attr('id', 'draw')
@@ -20,7 +17,7 @@ const enabledraw = () => {
                 $('<iframe>')
                     .attr({
                       id: 'drawEmbed',
-                      src: url,
+                      src: `//${drawHost}/boards/${padId}`,
                       width: '100%',
                       height: '100%',
                       frameborder: '0',
