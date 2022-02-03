@@ -1,43 +1,5 @@
 'use strict';
 
-exports.postAceInit = (hookName, context) => {
-  const draw = clientVars.ep_draw;
-  if (draw) {
-    if (draw.onByDefault) { // Setup testing else poop out
-      if (draw.onByDefault === 'true') {
-        enabledraw();
-        showdraw();
-      }
-    } else {
-      $('#draw').hide();
-      clientVars.ep_draw.enabled = false;
-      // we don't draw it by default
-    }
-
-    $('.toggle_draw').click(() => {
-      toggledraw();
-    });
-  }
-
-  try {
-    if (clientVars.ep_draw.icon) {
-      $('.draw_icon').css('background-image', `url(${clientVars.ep_draw.icon})`);
-      $('.draw_icon').css({
-        height: '16px',
-        width: '16px',
-      });
-    }
-  } catch (err) { /* ignored */ }
-
-  try {
-    if (clientVars.ep_draw.position) {
-      if (clientVars.ep_draw.position === 'right') {
-        $('.draw').parent().prependTo('.menu_right');
-      }
-    }
-  } catch (err) { /* ignored */ }
-};
-
 const enabledraw = () => {
   const authorName = 'Testing';
   const authorColor = $('#myswatch').css('background-color');
@@ -91,6 +53,11 @@ const hidedraw = () => {
   clientVars.ep_draw.visible = false;
 };
 
+const fullScreenDraw = () => {
+  clientVars.ep_draw.fullscreen = true;
+  $('#draw').animate({width: '100%', height: '100%'});
+};
+
 const toggledraw = () => {
   if (clientVars.ep_draw.visible === true && clientVars.ep_draw.fullscreen) {
     hidedraw();
@@ -106,7 +73,40 @@ const toggledraw = () => {
   }
 };
 
-const fullScreenDraw = () => {
-  clientVars.ep_draw.fullscreen = true;
-  $('#draw').animate({width: '100%', height: '100%'});
+exports.postAceInit = (hookName, context) => {
+  const draw = clientVars.ep_draw;
+  if (draw) {
+    if (draw.onByDefault) { // Setup testing else poop out
+      if (draw.onByDefault === 'true') {
+        enabledraw();
+        showdraw();
+      }
+    } else {
+      $('#draw').hide();
+      clientVars.ep_draw.enabled = false;
+      // we don't draw it by default
+    }
+
+    $('.toggle_draw').click(() => {
+      toggledraw();
+    });
+  }
+
+  try {
+    if (clientVars.ep_draw.icon) {
+      $('.draw_icon').css('background-image', `url(${clientVars.ep_draw.icon})`);
+      $('.draw_icon').css({
+        height: '16px',
+        width: '16px',
+      });
+    }
+  } catch (err) { /* ignored */ }
+
+  try {
+    if (clientVars.ep_draw.position) {
+      if (clientVars.ep_draw.position === 'right') {
+        $('.draw').parent().prependTo('.menu_right');
+      }
+    }
+  } catch (err) { /* ignored */ }
 };
