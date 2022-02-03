@@ -7,7 +7,8 @@
       },
       "hooks": {
         "eejsBlock_editbarMenuLeft": "ep_whiteboard/draw",
-        "clientVars":"ep_whiteboard/draw:clientVars"
+        "clientVars":"ep_whiteboard/draw",
+        "loadSettings":"ep_whiteboard/draw"
       }
     }
   ]

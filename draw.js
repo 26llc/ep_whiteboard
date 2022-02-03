@@ -1,7 +1,7 @@
 'use strict';
 
 const eejs = require('ep_etherpad-lite/node/eejs/');
-const settings = require('ep_etherpad-lite/node/utils/Settings');
+let settings = null;
 
 exports.eejsBlock_editbarMenuLeft = (hookName, context) => {
   context.content += eejs.require('ep_whiteboard/templates/editbarButtons.ejs');
@@ -16,8 +16,8 @@ exports.clientVars = async (hookName, context) => {
   };
 
   try {
-    if (!settings.ep_draw.host) throw new Error('missing host setting');
-    draw.host = settings.ep_draw.host;
+    if (!settings.host) throw new Error('missing host setting');
+    draw.host = settings.host;
   } catch (e) {
     console.warn(
         'ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the ' +
@@ -26,16 +26,20 @@ exports.clientVars = async (hookName, context) => {
   }
 
   try {
-    draw.onByDefault = !!settings.ep_draw.onByDefault;
+    draw.onByDefault = !!settings.onByDefault;
   } catch (err) { /* ignored */ }
 
   try {
-    if (settings.ep_draw.icon) draw.icon = settings.ep_draw.icon;
+    if (settings.icon) draw.icon = settings.icon;
   } catch (err) { /* ignored */ }
 
   try {
-    draw.position = settings.ep_draw.position || 'left';
+    draw.position = settings.position || 'left';
   } catch (err) { /* ignored */ }
 
   return {ep_whiteboard: draw};
+};
+
+exports.loadSettings = async (hookName, {settings: {ep_draw: pluginSettings = {}}}) => {
+  settings = pluginSettings;
 };
