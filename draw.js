@@ -1,24 +1,31 @@
+'use strict';
+
 const eejs = require('ep_etherpad-lite/node/eejs/');
 const settings = require('ep_etherpad-lite/node/utils/Settings');
-const drawString = '';
 
-exports.eejsBlock_editbarMenuLeft = function (hook_name, args, cb) {
+exports.eejsBlock_editbarMenuLeft = (hookName, args, cb) => {
   args.content += eejs.require('ep_whiteboard/templates/editbarButtons.ejs');
   return cb();
 };
 
-exports.clientVars = function (hook, context, callback) {
+exports.clientVars = (hookName, context, callback) => {
   const draw = {};
 
   try {
     if (settings.ep_draw.host) {
       draw.host = settings.ep_draw.host;
     } else {
-      console.warn("ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  'ep_draw' { 'host': 'your.etherdrawhost.com'}");
+      console.warn(
+          'ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the ' +
+          'etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  ' +
+          '"ep_draw" {"host": "your.etherdrawhost.com"}');
       draw.host = 'draw.etherpad.org';
     }
-  } catch (e) {
-    console.warn("ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  'ep_draw' { 'host': 'your.etherdrawhost.com'}");
+  } catch (err) {
+    console.warn(
+        'ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the ' +
+        'etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  ' +
+        '"ep_draw" {"host": "your.etherdrawhost.com"}');
     draw.host = 'draw.etherpad.org';
   }
 

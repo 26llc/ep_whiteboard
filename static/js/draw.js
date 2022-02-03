@@ -1,4 +1,6 @@
-var postAceInit = function (hook, context) {
+'use strict';
+
+exports.postAceInit = (hookName, context) => {
   const draw = clientVars.ep_draw;
   if (draw) {
     if (draw.onByDefault) { // Setup testing else poop out
@@ -25,9 +27,7 @@ var postAceInit = function (hook, context) {
         width: '16px',
       });
     }
-  } catch (e) {
-
-  }
+  } catch (err) { /* ignored */ }
 
   try {
     if (clientVars.ep_draw.position) {
@@ -35,27 +35,36 @@ var postAceInit = function (hook, context) {
         $('.draw').parent().prependTo('.menu_right');
       }
     }
-  } catch (e) {
-
-  }
+  } catch (err) { /* ignored */ }
 };
 
-function enabledraw() {
+const enabledraw = () => {
   const authorName = 'Testing';
   const authorColor = $('#myswatch').css('background-color');
-  const draw_host = clientVars.ep_draw.host;
+  const drawHost = clientVars.ep_draw.host;
 
   const padID = clientVars.padId;
 
   if ($('#draw').length === 0) { // If it's not available already then draw it
-    $('#editorcontainer').append(`<div id=draw><iframe id='drawEmbed' src='//${draw_host}/boards/${padID}?authorName=${authorName}&authorColor=${authorColor}' width='100%' height='100%' style='border:none' frameborder='0' scrolling='no'></iframe></div>`);
+    $('#editorcontainer').append(
+        `<div id=draw><iframe id="drawEmbed" src="//${drawHost}/boards/${padID}?authorName=` +
+        `${authorName}&authorColor=${authorColor}" width="100%" height="100%" ` +
+        'style="border:none" frameborder="0" scrolling="no"></iframe></div>');
   }
   clientVars.ep_draw.enabled = true;
   showdraw();
-}
+};
 
-function showdraw() {
-  $('#draw').css({'z-index': '999999', 'position': 'absolute', 'top': '0px', 'right': '0px', 'height': '200px', 'width': '200px', 'border': '1px solid #ccc'}).show();
+const showdraw = () => {
+  $('#draw').css({
+    'z-index': '999999',
+    'position': 'absolute',
+    'top': '0px',
+    'right': '0px',
+    'height': '200px',
+    'width': '200px',
+    'border': '1px solid #ccc',
+  }).show();
   $('#drawEmbed').show().css({overflow: 'hidden'});
   if (clientVars.ep_draw.enabled !== true) {
     enabledraw();
@@ -74,15 +83,15 @@ function showdraw() {
     });
   }
   clientVars.ep_draw.visible = true;
-}
+};
 
-function hidedraw() {
+const hidedraw = () => {
   $('#draw').hide();
   clientVars.ep_draw.fullscreen = false;
   clientVars.ep_draw.visible = false;
-}
+};
 
-function toggledraw() {
+const toggledraw = () => {
   if (clientVars.ep_draw.visible === true && clientVars.ep_draw.fullscreen) {
     hidedraw();
     return;
@@ -95,14 +104,9 @@ function toggledraw() {
     fullScreenDraw();
     return;
   }
-}
+};
 
-function fullScreenDraw() {
+const fullScreenDraw = () => {
   clientVars.ep_draw.fullscreen = true;
   $('#draw').animate({width: '100%', height: '100%'});
-}
-
-exports.postAceInit = postAceInit;
-exports.enabledraw = enabledraw;
-exports.showdraw = showdraw;
-exports.hidedraw = hidedraw;
+};
