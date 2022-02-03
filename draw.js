@@ -12,7 +12,7 @@ exports.clientVars = async (hookName, context) => {
     host: 'draw.etherpad.org',
     onByDefault: false,
     icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
-    position: 'right',
+    position: 'left',
   };
 
   try {
@@ -34,7 +34,7 @@ exports.clientVars = async (hookName, context) => {
   } catch (err) { /* ignored */ }
 
   try {
-    draw.position = settings.position || 'left';
+    if (settings.position) draw.position = settings.position;
   } catch (err) { /* ignored */ }
 
   return {ep_whiteboard: draw};
