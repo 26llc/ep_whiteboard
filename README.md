@@ -11,36 +11,32 @@ In your `settings.json`, add:
 Set up a host accessible from the user's browser.
 
 ```json
-    "ep_draw": {
-        "host": "your.etherdrawhost.com"
-    }
-
-    # Example
-    "ep_draw":{
-        "host": "localhost:9002"
-    }
+  "ep_whiteboard": {
+    "host": "wbo.example.com"
+  }
 ```
 ## To enable by Default
 
 ```json
-    "ep_draw": {
-        "onByDefault": true
-    }
+  "ep_whiteboard": {
+    "onByDefault": true
+  }
 ```
 
 ## To change the icon
 
 ```json
-    "ep_draw": {
-        "icon": "http://myicon.com/awesomeicon.png"
-    }
+  "ep_whiteboard": {
+    "icon": "http://myicon.com/awesomeicon.png"
+  }
 ```
 
 ## To put the icon on the right hand side of the toolbar
+
 ```json
-    "ep_draw": {
-        "position": "right"
-    }
+  "ep_whiteboard": {
+    "position": "right"
+  }
 ```
 
 
