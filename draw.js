@@ -9,56 +9,34 @@ exports.eejsBlock_editbarMenuLeft = (hookName, args, cb) => {
 };
 
 exports.clientVars = (hookName, context, callback) => {
-  const draw = {};
+  const draw = {
+    host: 'draw.etherpad.org',
+    onByDefault: false,
+    icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
+    position: 'right',
+  };
 
   try {
-    if (settings.ep_draw.host) {
-      draw.host = settings.ep_draw.host;
-    } else {
-      console.warn(
-          'ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the ' +
-          'etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  ' +
-          '"ep_draw" {"host": "your.etherdrawhost.com"}');
-      draw.host = 'draw.etherpad.org';
-    }
-  } catch (err) {
+    if (!settings.ep_draw.host) throw new Error('missing host setting');
+    draw.host = settings.ep_draw.host;
+  } catch (e) {
     console.warn(
         'ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the ' +
         'etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  ' +
         '"ep_draw" {"host": "your.etherdrawhost.com"}');
-    draw.host = 'draw.etherpad.org';
   }
 
   try {
-    if (settings.ep_draw.onByDefault) {
-      draw.onByDefault = true;
-    } else {
-      draw.onByDefault = false;
-    }
-  } catch (e) {
-    draw.onByDefault = false;
-  }
+    draw.onByDefault = !!settings.ep_draw.onByDefault;
+  } catch (err) { /* ignored */ }
 
   try {
-    if (settings.ep_draw.icon) {
-      draw.icon = settings.ep_draw.icon;
-    } else {
-      draw.icon = '../static/plugins/ep_whiteboard/static/img/icon.png';
-    }
-  } catch (e) {
-    draw.icon = '../static/plugins/ep_whiteboard/static/img/icon.png';
-  }
+    if (settings.ep_draw.icon) draw.icon = settings.ep_draw.icon;
+  } catch (err) { /* ignored */ }
 
   try {
-    if (settings.ep_draw.position) {
-      draw.position = settings.ep_draw.position;
-    } else {
-      draw.position = 'left';
-    }
-  } catch (e) {
-    draw.position = 'right';
-  }
-
+    draw.position = settings.ep_draw.position || 'left';
+  } catch (err) { /* ignored */ }
 
   return callback({ep_draw: draw});
 };
