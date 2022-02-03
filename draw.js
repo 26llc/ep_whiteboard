@@ -20,9 +20,9 @@ exports.clientVars = async (hookName, context) => {
     draw.host = settings.host;
   } catch (e) {
     console.warn(
-        'ep_whiteboard.host NOT SET in settings.json.  The requirement is the host of the ' +
-        'etherdraw service IE draw.etherpad.org, copy/paste value to settings.json --  ' +
-        '"ep_draw" {"host": "your.etherdrawhost.com"}');
+        'ep_draw.host NOT SET in settings.json. This must be set to the host name (optionally ' +
+        'followed by port and base path) to the WBO server. For example: ' +
+        '"ep_draw" {"host": "etherpad.example.com:5001/wbo"}');
   }
 
   try {
