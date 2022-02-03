@@ -1,19 +1,20 @@
 'use strict';
 
+let settings;
+let padId;
+
 const enabledraw = () => {
   const authorName = 'Testing';
   const authorColor = $('#myswatch').css('background-color');
-  const drawHost = clientVars.ep_draw.host;
-
-  const padID = clientVars.padId;
+  const drawHost = settings.host;
 
   if ($('#draw').length === 0) { // If it's not available already then draw it
     $('#editorcontainer').append(
-        `<div id=draw><iframe id="drawEmbed" src="//${drawHost}/boards/${padID}?authorName=` +
+        `<div id=draw><iframe id="drawEmbed" src="//${drawHost}/boards/${padId}?authorName=` +
         `${authorName}&authorColor=${authorColor}" width="100%" height="100%" ` +
         'style="border:none" frameborder="0" scrolling="no"></iframe></div>');
   }
-  clientVars.ep_draw.enabled = true;
+  settings.enabled = true;
   showdraw();
 };
 
@@ -28,62 +29,64 @@ const showdraw = () => {
     'border': '1px solid #ccc',
   }).show();
   $('#drawEmbed').show().css({overflow: 'hidden'});
-  if (clientVars.ep_draw.enabled !== true) {
+  if (settings.enabled !== true) {
     enabledraw();
 
     $('#draw').hover(function () {
       clearTimeout($(this).data('timeout'));
       $('#draw').animate({width: '100%', height: '100%'});
       $('#drawEmbed').animate({width: '100%', height: '100%'});
-      clientVars.ep_draw.fullscreen = true;
+      settings.fullscreen = true;
     }, function () {
       const t = setTimeout(() => { // Dont zoom out right away, wait a while
         $('#draw').animate({width: '200px', height: '200px'});
-        clientVars.ep_draw.fullscreen = false;
+        settings.fullscreen = false;
       }, 500);
       $(this).data('timeout', t);
     });
   }
-  clientVars.ep_draw.visible = true;
+  settings.visible = true;
 };
 
 const hidedraw = () => {
   $('#draw').hide();
-  clientVars.ep_draw.fullscreen = false;
-  clientVars.ep_draw.visible = false;
+  settings.fullscreen = false;
+  settings.visible = false;
 };
 
 const fullScreenDraw = () => {
-  clientVars.ep_draw.fullscreen = true;
+  settings.fullscreen = true;
   $('#draw').animate({width: '100%', height: '100%'});
 };
 
 const toggledraw = () => {
-  if (clientVars.ep_draw.visible === true && clientVars.ep_draw.fullscreen) {
+  if (settings.visible === true && settings.fullscreen) {
     hidedraw();
     return;
   }
-  if (!clientVars.ep_draw.visible) {
+  if (!settings.visible) {
     showdraw();
     return;
   }
-  if (clientVars.ep_draw.visible === true && !clientVars.ep_draw.fullscreen) {
+  if (settings.visible === true && !settings.fullscreen) {
     fullScreenDraw();
     return;
   }
 };
 
-exports.postAceInit = (hookName, context) => {
-  const draw = clientVars.ep_draw;
-  if (draw) {
-    if (draw.onByDefault) { // Setup testing else poop out
-      if (draw.onByDefault === 'true') {
+exports.postAceInit = (hookName, {clientVars}) => {
+  if (!clientVars) clientVars = window.clientVars; // For compatibility with Etherpad < v1.8.15.
+  settings = clientVars.ep_draw;
+  padId = clientVars.padId;
+  if (settings) {
+    if (settings.onByDefault) { // Setup testing else poop out
+      if (settings.onByDefault === 'true') {
         enabledraw();
         showdraw();
       }
     } else {
       $('#draw').hide();
-      clientVars.ep_draw.enabled = false;
+      settings.enabled = false;
       // we don't draw it by default
     }
 
@@ -93,8 +96,8 @@ exports.postAceInit = (hookName, context) => {
   }
 
   try {
-    if (clientVars.ep_draw.icon) {
-      $('.draw_icon').css('background-image', `url(${clientVars.ep_draw.icon})`);
+    if (settings.icon) {
+      $('.draw_icon').css('background-image', `url(${settings.icon})`);
       $('.draw_icon').css({
         height: '16px',
         width: '16px',
@@ -103,8 +106,8 @@ exports.postAceInit = (hookName, context) => {
   } catch (err) { /* ignored */ }
 
   try {
-    if (clientVars.ep_draw.position) {
-      if (clientVars.ep_draw.position === 'right') {
+    if (settings.position) {
+      if (settings.position === 'right') {
         $('.draw').parent().prependTo('.menu_right');
       }
     }
