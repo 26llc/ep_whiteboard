@@ -3,12 +3,11 @@
 const eejs = require('ep_etherpad-lite/node/eejs/');
 const settings = require('ep_etherpad-lite/node/utils/Settings');
 
-exports.eejsBlock_editbarMenuLeft = (hookName, args, cb) => {
-  args.content += eejs.require('ep_whiteboard/templates/editbarButtons.ejs');
-  return cb();
+exports.eejsBlock_editbarMenuLeft = (hookName, context) => {
+  context.content += eejs.require('ep_whiteboard/templates/editbarButtons.ejs');
 };
 
-exports.clientVars = (hookName, context, callback) => {
+exports.clientVars = async (hookName, context) => {
   const draw = {
     host: 'draw.etherpad.org',
     onByDefault: false,
@@ -38,5 +37,5 @@ exports.clientVars = (hookName, context, callback) => {
     draw.position = settings.ep_draw.position || 'left';
   } catch (err) { /* ignored */ }
 
-  return callback({ep_draw: draw});
+  return {ep_draw: draw};
 };
