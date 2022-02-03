@@ -12,7 +12,7 @@ Set up a host accessible from the user's browser.
 
 ```json
   "ep_whiteboard": {
-    "host": "wbo.example.com"
+    "wboUrl": "https://wbo.example.com"
   }
 ```
 ## To enable by Default

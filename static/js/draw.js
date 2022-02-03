@@ -1,14 +1,11 @@
 'use strict';
 
 let settings;
-let padId;
 let enabled = false;
 let fullscreen = false;
 let visible = false;
 
 const enabledraw = () => {
-  const drawHost = settings.host;
-
   if ($('#draw').length === 0) { // If it's not available already then draw it
     $('#editorcontainer').append(
         $('<div>')
@@ -17,7 +14,7 @@ const enabledraw = () => {
                 $('<iframe>')
                     .attr({
                       id: 'drawEmbed',
-                      src: `//${drawHost}/boards/${padId}`,
+                      src: settings.boardUrl,
                       width: '100%',
                       height: '100%',
                       frameborder: '0',
@@ -90,13 +87,15 @@ const toggledraw = () => {
 exports.postAceInit = (hookName, {clientVars}) => {
   if (!clientVars) clientVars = window.clientVars; // For compatibility with Etherpad < v1.8.15.
   settings = Object.assign({
-    host: null,
+    wboUrl: null,
     onByDefault: false,
     icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
     position: 'left',
   }, clientVars.ep_whiteboard || {});
-  if (!settings.host) return;
-  padId = clientVars.padId;
+  if (!settings.wboUrl) return;
+  const url = new URL(settings.wboUrl, window.location.href);
+  if (!url.pathname.endsWith('/')) url.pathname += '/';
+  settings.boardUrl = new URL(`boards/${clientVars.padId}`, url).href;
   if (settings.onByDefault) {
     enabledraw();
     showdraw();
