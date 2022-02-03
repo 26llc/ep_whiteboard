@@ -90,11 +90,12 @@ const toggledraw = () => {
 exports.postAceInit = (hookName, {clientVars}) => {
   if (!clientVars) clientVars = window.clientVars; // For compatibility with Etherpad < v1.8.15.
   settings = Object.assign({
-    host: 'draw.etherpad.org',
+    host: null,
     onByDefault: false,
     icon: '../static/plugins/ep_whiteboard/static/img/icon.png',
     position: 'left',
   }, clientVars.ep_whiteboard || {});
+  if (!settings.host) return;
   padId = clientVars.padId;
   if (settings.onByDefault) {
     enabledraw();

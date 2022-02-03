@@ -4,6 +4,7 @@ const eejs = require('ep_etherpad-lite/node/eejs/');
 let settings = null;
 
 exports.eejsBlock_editbarMenuLeft = (hookName, context) => {
+  if (!settings.host) return;
   context.content += eejs.require('ep_whiteboard/templates/editbarButtons.ejs');
 };
 
