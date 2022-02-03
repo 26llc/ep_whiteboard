@@ -2,6 +2,9 @@
 
 let settings;
 let padId;
+let enabled = false;
+let fullscreen = false;
+let visible = false;
 
 const enabledraw = () => {
   const authorName = 'Testing';
@@ -14,7 +17,7 @@ const enabledraw = () => {
         `${authorName}&authorColor=${authorColor}" width="100%" height="100%" ` +
         'style="border:none" frameborder="0" scrolling="no"></iframe></div>');
   }
-  settings.enabled = true;
+  enabled = true;
   showdraw();
 };
 
@@ -29,46 +32,46 @@ const showdraw = () => {
     'border': '1px solid #ccc',
   }).show();
   $('#drawEmbed').show().css({overflow: 'hidden'});
-  if (settings.enabled !== true) {
+  if (!enabled) {
     enabledraw();
 
     $('#draw').hover(function () {
       clearTimeout($(this).data('timeout'));
       $('#draw').animate({width: '100%', height: '100%'});
       $('#drawEmbed').animate({width: '100%', height: '100%'});
-      settings.fullscreen = true;
+      fullscreen = true;
     }, function () {
       const t = setTimeout(() => { // Dont zoom out right away, wait a while
         $('#draw').animate({width: '200px', height: '200px'});
-        settings.fullscreen = false;
+        fullscreen = false;
       }, 500);
       $(this).data('timeout', t);
     });
   }
-  settings.visible = true;
+  visible = true;
 };
 
 const hidedraw = () => {
   $('#draw').hide();
-  settings.fullscreen = false;
-  settings.visible = false;
+  fullscreen = false;
+  visible = false;
 };
 
 const fullScreenDraw = () => {
-  settings.fullscreen = true;
+  fullscreen = true;
   $('#draw').animate({width: '100%', height: '100%'});
 };
 
 const toggledraw = () => {
-  if (settings.visible === true && settings.fullscreen) {
+  if (visible && fullscreen) {
     hidedraw();
     return;
   }
-  if (!settings.visible) {
+  if (!visible) {
     showdraw();
     return;
   }
-  if (settings.visible === true && !settings.fullscreen) {
+  if (visible && !fullscreen) {
     fullScreenDraw();
     return;
   }
@@ -86,7 +89,7 @@ exports.postAceInit = (hookName, {clientVars}) => {
       }
     } else {
       $('#draw').hide();
-      settings.enabled = false;
+      enabled = false;
       // we don't draw it by default
     }
 
