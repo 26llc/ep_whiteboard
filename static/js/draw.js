@@ -95,7 +95,8 @@ exports.postAceInit = (hookName, {clientVars}) => {
   if (!settings.wboUrl) return;
   const url = new URL(settings.wboUrl, window.location.href);
   if (!url.pathname.endsWith('/')) url.pathname += '/';
-  settings.boardUrl = new URL(`boards/${clientVars.padId}`, url).href;
+  const boardId = clientVars.padId.replace(/[^-\w_%()]/g, (c) => `~${c.charCodeAt(0)}~`);
+  settings.boardUrl = new URL(`boards/${encodeURIComponent(boardId)}`, url).href;
   if (settings.onByDefault) {
     enabledraw();
     showdraw();
